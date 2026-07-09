@@ -1,0 +1,72 @@
+X = df.drop("attack", axis=1)
+y = df["attack"]
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+DoS     -> 0
+Normal  -> 1
+Probe   -> 2
+R2L     -> 3
+U2R     -> 4
+
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier()
+
+model.fit(X_train, y_train)
+
+pred = model.predict(X_test)
+
+predicted_attack = le.inverse_transform(pred)
+
+print(predicted_attack)
+
+['dos'
+ 'normal'
+ 'probe'
+ 'dos'
+ 'r2l'
+ 'u2r']
+
+
+ import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+
+# Read dataset
+df = pd.read_csv("network_intrusion.csv")
+
+# Features and target
+X = df.drop("attack", axis=1)
+y = df["attack"]
+
+# Encode categorical features
+X = pd.get_dummies(X)
+
+# Encode labels
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+# Train
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict
+pred = model.predict(X_test)
+
+# Convert prediction back to labels
+pred_attack = le.inverse_transform(pred)
+
+print(pred_attack[:10])
